@@ -23,7 +23,7 @@ class SinusoidalItem {
   final SinusoidalModel model;
 }
 
-/// A class which holds params to form sinusoidal formulars
+/// A class which holds params to form sinusoidal formulars.
 ///
 /// For more information about sinusoidal: https://en.wikipedia.org/wiki/Sine_wave
 ///
@@ -255,13 +255,34 @@ class _SinusoidalState extends _BaseWaveWidgetState<Sinusoidal> {
 
 /// A widget which helps visualize a combined wave.
 ///
-/// A combined wave is a wave that is formed by adding multiple sinusoidal together.
+/// A combined wave is a wave that is formed by adding multiple sinusoidals together.
 ///
 /// {@tool snippet}
 ///
 /// Example of a combined wave:
 ///
 /// ```
+/// CombinedWave(
+///   reverse: true,
+///   models: const [
+///     SinusoidalModel(
+///       amplitude: 25,
+///       waves: 20,
+///       translate: 2.5,
+///       frequency: 0.5,
+///     ),
+///     SinusoidalModel(
+///       amplitude: 25,
+///       waves: 15,
+///       translate: 7.5,
+///       frequency: 1.5,
+///     ),
+///   ],
+///   child: Container(
+///     height: 200,
+///     color: Colors.blue,
+///   ),
+/// ),
 /// ```
 /// {@end-tool}
 ///
@@ -308,7 +329,7 @@ class _CombinedWaveState extends _BaseWaveWidgetState<CombinedWave> {
   }
 }
 
-/// A pre-defined wave which mimic magma.
+/// A pre-defined wave that mimicking magma motion.
 ///
 /// [child]'s height need to be at least 100 to work.
 class MagmaWave extends _BaseWaveWidget {
