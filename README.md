@@ -2,7 +2,7 @@
 
 A flutter package which helps visualizing sine waves.
 
-![Overview]()
+![Overview](images/record_1.gif)
 
 ## Features
 
@@ -35,7 +35,7 @@ This package comes with 4 kinds of sine waves:
 
 A widget which helps visualize a sinusoidal.
 
-![Overview]()
+![Overview](images/sinusoidal.gif)
 
 Example of a sinusoidal:
 
@@ -58,7 +58,7 @@ Sinusoidal(
 
 A widget which helps visualize a stack of sinusoidals.
 
-![Overview]()
+![Overview](images/sinusoidals.gif)
 
 Example of a sinusoidals:
 
@@ -89,7 +89,7 @@ A widget which helps visualize a combined wave.
 
 A combined wave is a wave that is formed by adding multiple sinusoidals together.
 
-![Overview]()
+![Overview](images/combined_wave.gif)
 
 Example of a combined wave:
 
@@ -121,9 +121,9 @@ CombinedWave(
 
 A pre-defined wave that mimicking magma motion.
 
-This is included in the package to demonstrate that you can create a crazy awesome wave by combining multiple waves together.
+This is included in the package just to demonstrate that you can create a crazy awesome wave by combining multiple waves together.
 
-![Overview]()
+![Overview](images/magma_wave.gif)
 
 ### References
 
