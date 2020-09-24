@@ -24,7 +24,7 @@ dependencies:
 In your code add the following import:
 
 ```dart
-import 'package:flutter_sinusoidals/sinusoidal.dart';
+import 'package:flutter_sinusoidals/flutter_sinusoidals.dart';
 ```
 
 ## Built-in waves
