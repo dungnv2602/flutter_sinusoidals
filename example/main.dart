@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Material App',
       home: Scaffold(
-        body: _SinusoidalDemo(),
+        body: _MagmaWaveDemo(),
       ),
     );
   }
