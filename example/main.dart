@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Material App',
       home: Scaffold(
-        body: _MagmaWaveDemo(),
+        body: _SinusoidalDemo(),
       ),
     );
   }
@@ -98,6 +98,7 @@ class _SinusoidalDemo extends StatelessWidget {
           model: const SinusoidalModel(
             amplitude: 15,
             waves: 5,
+            frequency: -0.5,
           ),
           child: Container(
             height: 100,

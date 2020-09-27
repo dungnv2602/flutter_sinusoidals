@@ -16,7 +16,7 @@ class SinusoidalItem {
     @required this.child,
   }) : assert(child != null);
 
-  /// A given child which is clipped from to create sinusoidal.
+  /// A given child at which will be  from to create a sinusoidal.
   final Widget child;
 
   /// Model given to visualize a sinuisodal.
@@ -55,19 +55,26 @@ class SinusoidalModel extends Equatable {
   final bool travelling;
 
   /// The peak deviation of the function from zero.
+  ///
+  /// Represent how much space will be clipped to form a wave
+  /// from top to bottom, or bottom to top if `reverse = true`.
   final double amplitude;
 
-  /// a non-zero center amplitude
+  /// a non-zero center amplitude, specifies the origin the the wave.
   final double center; // midline
 
-  /// The rate of change of the function argument in units of radians per second.
+  /// The rate of change of the function argument.
   ///
   /// To make the repeat animation effect seamlessly, `frequency` must be divided by 0.5
+  ///
+  /// To change the direction of the wave, simply change the sign of `frequency`.
+  /// * positive: LTR
+  /// * negative: RTL
   final double frequency;
 
-  /// Phase, specifies (in radians) where in its cycle the oscillation is at t = 0
+  /// Phase, where in its cycle the oscillation is at t = 0
   ///
-  /// When d is non-zero, the entire waveform appears to be shifted in time by the amount of d/w.
+  /// When `translate` is non-zero, the entire waveform appears to be shifted in time.
   ///
   /// A negative value represents a delay, and a positive value represents an advance.
   final double translate;
@@ -75,6 +82,7 @@ class SinusoidalModel extends Equatable {
   /// Wave number (or angular wave number).
   final double waves;
 
+  @protected
   double getY(double dx, double time) {
     assert(frequency % 0.5 == 0, 'To get seamlessly animation effect , "frequency" must be divided by 0.5');
     return travelling ? _getTravellingY(dx, time) : standing ? _getStandingY(dx, time) : _getNormalY(dx, time);
@@ -229,7 +237,7 @@ class Sinusoidal extends _BaseWaveWidget {
           reverse: reverse ?? false,
         );
 
-  /// A given child which is clipped from to create sinusoidal.
+  /// A given child at which will be  from to create a sinusoidal.
   final Widget child;
 
   /// Model given to visualize a sinuisodal.
@@ -305,7 +313,7 @@ class CombinedWave extends _BaseWaveWidget {
           reverse: reverse ?? false,
         );
 
-  /// A given child which is clipped from to create sinusoidal.
+  /// A given child at which will be  from to create a wave.
   final Widget child;
 
   /// Models given to visualize a combined wave.
@@ -345,7 +353,7 @@ class MagmaWave extends _BaseWaveWidget {
           reverse: reverse ?? false,
         );
 
-  /// A given child which is clipped from to create sinusoidal.
+  /// A given child at which will be  from to create a wave.
   final Widget child;
 
   @override
@@ -376,6 +384,7 @@ abstract class _BaseWaveWidget extends StatefulWidget {
   final int period;
 
   /// If `reverse = true`, then clipping from bottom to top.
+  ///
   /// Default is clipping from top to bottom.
   final bool reverse;
 }
@@ -423,24 +432,7 @@ class _SinusoidalClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(size);
-  }
-
-  Path _getPath(Size size) {
-    if (reverse) {
-      return Path()
-        ..lineTo(0.0, size.height)
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, 0.0)
-        ..lineTo(0.0, 0.0)
-        ..close();
-    } else {
-      return Path()
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, size.height)
-        ..lineTo(0.0, size.height)
-        ..close();
-    }
+    return _getPath(reverse, offsets, size);
   }
 
   double _getY(Size size, double dx) {
@@ -475,24 +467,7 @@ class _CombinedWaveClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(size);
-  }
-
-  Path _getPath(Size size) {
-    if (reverse) {
-      return Path()
-        ..lineTo(0.0, size.height)
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, 0.0)
-        ..lineTo(0.0, 0.0)
-        ..close();
-    } else {
-      return Path()
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, size.height)
-        ..lineTo(0.0, size.height)
-        ..close();
-    }
+    return _getPath(reverse, offsets, size);
   }
 
   double _getY(Size size, double dx) {
@@ -525,24 +500,7 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(size);
-  }
-
-  Path _getPath(Size size) {
-    if (reverse) {
-      return Path()
-        ..lineTo(0.0, size.height)
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, 0.0)
-        ..lineTo(0.0, 0.0)
-        ..close();
-    } else {
-      return Path()
-        ..addPolygon(offsets, false)
-        ..lineTo(size.width, size.height)
-        ..lineTo(0.0, size.height)
-        ..close();
-    }
+    return _getPath(reverse, offsets, size);
   }
 
   double _getY(Size size, double dx) {
@@ -563,4 +521,21 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(_MagmaWaveClipper oldClipper) => reverse != oldClipper.reverse || time != oldClipper.time;
+}
+
+Path _getPath(bool reverse, List<Offset> offsets, Size size) {
+  if (reverse) {
+    return Path()
+      ..lineTo(0.0, size.height)
+      ..addPolygon(offsets, false)
+      ..lineTo(size.width, 0.0)
+      ..lineTo(0.0, 0.0)
+      ..close();
+  } else {
+    return Path()
+      ..addPolygon(offsets, false)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0.0, size.height)
+      ..close();
+  }
 }

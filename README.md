@@ -1,6 +1,9 @@
 # flutter_sinusoidals
 
-A flutter package which helps visualizing sine waves.
+[![Pub](https://img.shields.io/pub/v/flutter_sinusoidals.svg)](https://pub.dartlang.org/packages/flutter_sinusoidals)
+
+A flutter package that helps you to visualize sine waves as you desire.
+All basic waves are already supported, plus customized waves & some pre-defined waves.
 
 ![Overview](images/record_1.gif)
 
@@ -9,7 +12,7 @@ A flutter package which helps visualizing sine waves.
 * Creating a sine wave.
 * Creating a stack of sine waves.
 * Combine multiple sine waves together.
-* Use clipping to achieve wave effect to you can apply wave to any widget. E.g: An AppBar with sine wave.
+* This package use clipping to achieve wave effect so theoretically you can apply it to any widget. For example, an AppBar with a wave on the bottom.
 
 ## Getting started
 
@@ -121,7 +124,7 @@ CombinedWave(
 
 A pre-defined wave that mimicking magma motion.
 
-This is included in the package just to demonstrate that you can create a crazy awesome wave by combining multiple waves together.
+This is included in the package just to demonstrate that you can create an awesome wave by combining multiple waves together.
 
 ![Overview](images/magma_wave.gif)
 
