@@ -9,10 +9,10 @@ All basic waves are already supported, plus customized waves & some pre-defined 
 
 ## Features
 
-* Creating a sine wave.
-* Creating a stack of sine waves.
-* Combine multiple sine waves together.
-* This package use clipping to achieve wave effect so theoretically you can apply it to any widget. For example, an AppBar with a wave on the bottom.
+- Creating a sine wave.
+- Creating a stack of sine waves.
+- Combine multiple sine waves together.
+- This package use clipping to achieve wave effect so theoretically you can apply it to any widget. For example, an AppBar with a wave on the bottom.
 
 ## Getting started
 
@@ -45,7 +45,7 @@ Example of a sinusoidal:
 ```dart
 Sinusoidal(
   model: const SinusoidalModel(
-    travelling: true,
+    formular: WaveFormular.standing,
     amplitude: 25,
     waves: 2.5,
     frequency: 1.5,
@@ -71,7 +71,7 @@ Sinusoidals(
   builder: (context, index) {
     return SinusoidalItem(
       model: SinusoidalModel(
-        travelling: true,
+        formular: WaveFormular.travelling,
         amplitude: _amplitude,
         waves: _waves,
         translate: 5.0 * (index + 1),

@@ -45,7 +45,7 @@ class _SinusoidalsDemo extends StatelessWidget {
           builder: (context, index) {
             return SinusoidalItem(
               model: SinusoidalModel(
-                standing: true,
+                formular: WaveFormular.standing,
                 amplitude: _amplitude,
                 waves: _waves,
                 translate: 5.0 * (index + 1),
@@ -65,7 +65,7 @@ class _SinusoidalsDemo extends StatelessWidget {
           builder: (context, index) {
             return SinusoidalItem(
               model: SinusoidalModel(
-                travelling: true,
+                formular: WaveFormular.travelling,
                 amplitude: _amplitude,
                 waves: _waves,
                 translate: 5.0 * (index + 1),
@@ -119,7 +119,7 @@ class _SinusoidalDemo extends StatelessWidget {
         const SizedBox(height: 50),
         Sinusoidal(
           model: const SinusoidalModel(
-            standing: true,
+            formular: WaveFormular.standing,
             translate: 5.0,
             amplitude: 25,
             waves: 2,
@@ -133,7 +133,7 @@ class _SinusoidalDemo extends StatelessWidget {
         const SizedBox(height: 50),
         Sinusoidal(
           model: const SinusoidalModel(
-            travelling: true,
+            formular: WaveFormular.travelling,
             amplitude: 25,
             waves: 2.5,
             frequency: 0.5,

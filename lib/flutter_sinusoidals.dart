@@ -4,10 +4,19 @@ import 'package:flutter/widgets.dart';
 
 import 'package:equatable/equatable.dart';
 
+enum WaveFormular {
+  normal,
+  standing,
+  travelling,
+}
+
 const _tau = 2 * math.pi;
 
 /// Signature for [Sinusoidals.builder] that creates a [SinusoidalItem] for a given index.
-typedef SinusoidalItemBuilder = SinusoidalItem Function(BuildContext context, int index);
+typedef SinusoidalItemBuilder = SinusoidalItem Function(
+  BuildContext context,
+  int index,
+);
 
 /// An utility class which holds [SinusoidalModel] for each child in [Sinusoidals].
 class SinusoidalItem {
@@ -31,8 +40,7 @@ class SinusoidalItem {
 ///
 class SinusoidalModel extends Equatable {
   const SinusoidalModel({
-    this.travelling = false,
-    this.standing = false,
+    this.formular = WaveFormular.normal,
     this.center = 0,
     this.translate = 0,
     this.amplitude = 10,
@@ -40,19 +48,10 @@ class SinusoidalModel extends Equatable {
     this.waves = 1,
   });
 
-  /// If `standing = true`, standing wave formular will be used instead.
+  /// Defines what wave formular to use.
   ///
-  /// Priority order: [travelling], then [standing], and lastly default.
-  ///
-  /// Default is general form sine wave.
-  final bool standing;
-
-  /// If `travelling = true`, travelling wave formular will be used instead.
-  ///
-  /// Priority order: [travelling], then [standing], and lastly default.
-  ///
-  /// Default is general form sine wave formular.
-  final bool travelling;
+  /// Defaults to [WaveFormular.normal] that uses general form sine wave.
+  final WaveFormular formular;
 
   /// The peak deviation of the function from zero.
   ///
@@ -84,23 +83,40 @@ class SinusoidalModel extends Equatable {
 
   @protected
   double getY(double dx, double time) {
-    assert(frequency % 0.5 == 0, 'To get seamlessly animation effect , "frequency" must be divided by 0.5');
-    return travelling ? _getTravellingY(dx, time) : standing ? _getStandingY(dx, time) : _getNormalY(dx, time);
+    assert(
+      frequency % 0.5 == 0,
+      'To get seamlessly animation effect , "frequency" must be divided by 0.5',
+    );
+    switch (formular) {
+      case WaveFormular.travelling:
+        return _getTravellingY(dx, time);
+      case WaveFormular.standing:
+        return _getStandingY(dx, time);
+      case WaveFormular.normal:
+      default:
+        return _getNormalY(dx, time);
+    }
   }
 
   double _getNormalY(double dx, double time) =>
-      amplitude * math.sin(waves / 100 * dx - frequency * time + translate) + center;
+      amplitude * math.sin(waves / 100 * dx - frequency * time + translate) +
+      center;
 
   double _getStandingY(double dx, double time) =>
-      amplitude * math.sin(waves / 100 * dx + translate) * math.sin(frequency * time) + center;
+      amplitude *
+          math.sin(waves / 100 * dx + translate) *
+          math.sin(frequency * time) +
+      center;
 
   double _getTravellingY(double dx, double time) =>
-      amplitude * math.sin(waves / 100 * dx - frequency * time + translate) * math.sin(frequency * time) + center;
+      amplitude *
+          math.sin(waves / 100 * dx - frequency * time + translate) *
+          math.sin(frequency * time) +
+      center;
 
   @override
   List<Object> get props => [
-        standing,
-        travelling,
+        formular,
         amplitude,
         center,
         frequency,
@@ -389,7 +405,8 @@ abstract class _BaseWaveWidget extends StatefulWidget {
   final bool reverse;
 }
 
-abstract class _BaseWaveWidgetState<T extends _BaseWaveWidget> extends State<T> with SingleTickerProviderStateMixin<T> {
+abstract class _BaseWaveWidgetState<T extends _BaseWaveWidget> extends State<T>
+    with SingleTickerProviderStateMixin<T> {
   AnimationController _timeController;
 
   @override
@@ -443,7 +460,9 @@ class _SinusoidalClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(_SinusoidalClipper oldClipper) =>
-      reverse != oldClipper.reverse || time != oldClipper.time || model != oldClipper.model;
+      reverse != oldClipper.reverse ||
+      time != oldClipper.time ||
+      model != oldClipper.model;
 }
 
 class _CombinedWaveClipper extends CustomClipper<Path> {
@@ -471,14 +490,20 @@ class _CombinedWaveClipper extends CustomClipper<Path> {
   }
 
   double _getY(Size size, double dx) {
-    final y = models.map((model) => model.getY(dx, time.value)).reduce((current, next) => current + next);
-    final amplitude = models.map((model) => model.amplitude).reduce((current, next) => current + next);
+    final y = models
+        .map((model) => model.getY(dx, time.value))
+        .reduce((current, next) => current + next);
+    final amplitude = models
+        .map((model) => model.amplitude)
+        .reduce((current, next) => current + next);
     return reverse ? size.height - y - amplitude : y + amplitude;
   }
 
   @override
   bool shouldReclip(_CombinedWaveClipper oldClipper) =>
-      reverse != oldClipper.reverse || time != oldClipper.time || models != oldClipper.models;
+      reverse != oldClipper.reverse ||
+      time != oldClipper.time ||
+      models != oldClipper.models;
 }
 
 class _MagmaWaveClipper extends CustomClipper<Path> {
@@ -514,13 +539,18 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
     return reverse ? size.height - y - amplitude : y + amplitude;
   }
 
-  double _getNormalY1(double dx, double time) => 25 * math.sin(math.cos(5 / 100 * dx) - time + 2.5);
-  double _getNormalY2(double dx, double time) => 25 * math.cos(math.sin(25 / 100 * dx) - 2 * time + 2.5);
-  double _getNormalY3(double dx, double time) => 25 * math.sin(math.sin(15 / 100 * dx) - math.sin(2 * time) + 2.5);
-  double _getNormalY4(double dx, double time) => 25 * math.cos(math.cos(5 / 100 * dx) - math.cos(time) + 2.5);
+  double _getNormalY1(double dx, double time) =>
+      25 * math.sin(math.cos(5 / 100 * dx) - time + 2.5);
+  double _getNormalY2(double dx, double time) =>
+      25 * math.cos(math.sin(25 / 100 * dx) - 2 * time + 2.5);
+  double _getNormalY3(double dx, double time) =>
+      25 * math.sin(math.sin(15 / 100 * dx) - math.sin(2 * time) + 2.5);
+  double _getNormalY4(double dx, double time) =>
+      25 * math.cos(math.cos(5 / 100 * dx) - math.cos(time) + 2.5);
 
   @override
-  bool shouldReclip(_MagmaWaveClipper oldClipper) => reverse != oldClipper.reverse || time != oldClipper.time;
+  bool shouldReclip(_MagmaWaveClipper oldClipper) =>
+      reverse != oldClipper.reverse || time != oldClipper.time;
 }
 
 Path _getPath(bool reverse, List<Offset> offsets, Size size) {
