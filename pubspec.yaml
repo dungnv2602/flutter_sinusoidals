@@ -2,7 +2,7 @@ name: flutter_sinusoidals
 description: >-
   A flutter package that helps you to visualize sine waves as you desire.
   All basic waves are already supported, plus customized waves & some pre-defined waves.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/dungnv2602/flutter_sinusoidals
 
 environment:

@@ -143,7 +143,7 @@ class SinusoidalModel extends Equatable {
 ///   builder: (context, index) {
 ///     return SinusoidalItem(
 ///       model: SinusoidalModel(
-///         travelling: true,
+///         formular: WaveFormular.travelling,
 ///         amplitude: _amplitude,
 ///         waves: _waves,
 ///         translate: 5.0 * (index + 1),
@@ -227,7 +227,7 @@ class _SinusoidalsState extends _BaseWaveWidgetState<Sinusoidals> {
 /// ```
 /// Sinusoidal(
 ///   model: const SinusoidalModel(
-///     travelling: true,
+///     formular: WaveFormular.travelling,
 ///     amplitude: 25,
 ///     waves: 2.5,
 ///     frequency: 1.5,
