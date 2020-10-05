@@ -1,3 +1,9 @@
+// Copyright 2020 dungnv2602. All rights reserved.
+// Use of this source code is governed by a license that can be
+// found in the LICENSE file.
+
+// @dart = 2.9
+
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
@@ -25,7 +31,7 @@ class SinusoidalItem {
     @required this.child,
   }) : assert(child != null);
 
-  /// A given child at which will be  from to create a sinusoidal.
+  /// A given child at which will be clipped from to create a sinusoidal.
   final Widget child;
 
   /// Model given to visualize a sinuisodal.
@@ -36,7 +42,7 @@ class SinusoidalItem {
 ///
 /// For more information about sinusoidal: https://en.wikipedia.org/wiki/Sine_wave
 ///
-/// Try demos to create your sinusoidal: https://www.desmos.com/calculator/3renylhzcu
+/// Try demos to create your sinusoidal: https://www.desmos.com/calculator/ks3f232ook
 ///
 class SinusoidalModel extends Equatable {
   const SinusoidalModel({
