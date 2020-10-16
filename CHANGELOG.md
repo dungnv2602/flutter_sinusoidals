@@ -1,3 +1,7 @@
+## 0.1.4
+### Changed
+* Fix LICENSE.
+
 ## 0.1.3
 ### Changed
 * Update docs.
