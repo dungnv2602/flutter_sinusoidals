@@ -1,4 +1,4 @@
-// Copyright 2020 by author & contributors. All rights reserved.
+// Copyright 2020 Nguyen Viet Dung. All rights reserved.
 // Use of this source code is governed by a license that can be
 // found in the LICENSE file.
 
