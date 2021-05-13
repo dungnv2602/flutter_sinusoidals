@@ -2,7 +2,7 @@
 // Use of this source code is governed by a license that can be
 // found in the LICENSE file.
 
-// @dart = 2.9
+
 
 import 'dart:math' as math;
 
@@ -28,7 +28,7 @@ typedef SinusoidalItemBuilder = SinusoidalItem Function(
 class SinusoidalItem {
   const SinusoidalItem({
     this.model = const SinusoidalModel(),
-    @required this.child,
+    required this.child,
   }) : assert(child != null);
 
   /// A given child at which will be clipped from to create a sinusoidal.
@@ -166,11 +166,11 @@ class SinusoidalModel extends Equatable {
 ///
 class Sinusoidals extends _BaseWaveWidget {
   const Sinusoidals({
-    Key key,
-    @required this.itemCount,
-    @required this.builder,
-    int period,
-    bool reverse,
+    Key? key,
+    required this.itemCount,
+    required this.builder,
+    int? period,
+    bool? reverse,
     this.alignment = AlignmentDirectional.topStart,
   })  : assert(itemCount != null),
         assert(builder != null),
@@ -247,11 +247,11 @@ class _SinusoidalsState extends _BaseWaveWidgetState<Sinusoidals> {
 ///
 class Sinusoidal extends _BaseWaveWidget {
   const Sinusoidal({
-    Key key,
+    Key? key,
     this.model = const SinusoidalModel(),
-    int period,
-    bool reverse,
-    @required this.child,
+    int? period,
+    bool? reverse,
+    required this.child,
   })  : assert(child != null),
         super(
           key: key,
@@ -323,11 +323,11 @@ class _SinusoidalState extends _BaseWaveWidgetState<Sinusoidal> {
 ///
 class CombinedWave extends _BaseWaveWidget {
   const CombinedWave({
-    Key key,
-    @required this.models,
-    int period,
-    bool reverse,
-    @required this.child,
+    Key? key,
+    required this.models,
+    int? period,
+    bool? reverse,
+    required this.child,
   })  : assert(child != null),
         super(
           key: key,
@@ -364,10 +364,10 @@ class _CombinedWaveState extends _BaseWaveWidgetState<CombinedWave> {
 /// [child]'s height need to be at least 100 to work.
 class MagmaWave extends _BaseWaveWidget {
   const MagmaWave({
-    Key key,
-    int period,
-    bool reverse,
-    @required this.child,
+    Key? key,
+    int? period,
+    bool? reverse,
+    required this.child,
   })  : assert(child != null),
         super(
           key: key,
@@ -397,23 +397,23 @@ class _MagmaWaveState extends _BaseWaveWidgetState<MagmaWave> {
 
 abstract class _BaseWaveWidget extends StatefulWidget {
   const _BaseWaveWidget({
-    Key key,
+    Key? key,
     this.period,
     this.reverse,
   }) : super(key: key);
 
   /// The period (measured in milliseconds) to complete a full revolution.
-  final int period;
+  final int? period;
 
   /// If `reverse = true`, then clipping from bottom to top.
   ///
   /// Default is clipping from top to bottom.
-  final bool reverse;
+  final bool? reverse;
 }
 
 abstract class _BaseWaveWidgetState<T extends _BaseWaveWidget> extends State<T>
     with SingleTickerProviderStateMixin<T> {
-  AnimationController _timeController;
+  AnimationController? _timeController;
 
   @override
   void initState() {
@@ -424,12 +424,12 @@ abstract class _BaseWaveWidgetState<T extends _BaseWaveWidget> extends State<T>
       animationBehavior: AnimationBehavior.preserve,
       duration: Duration(milliseconds: widget.period ?? 5000),
     );
-    _timeController.repeat();
+    _timeController!.repeat();
   }
 
   @override
   void dispose() {
-    _timeController.dispose();
+    _timeController!.dispose();
     super.dispose();
   }
 }
@@ -443,9 +443,9 @@ class _SinusoidalClipper extends CustomClipper<Path> {
 
   static final List<Offset> offsets = <Offset>[];
 
-  final Animation<double> time;
-  final SinusoidalModel model;
-  final bool reverse;
+  final Animation<double>? time;
+  final SinusoidalModel? model;
+  final bool? reverse;
 
   @override
   Path getClip(Size size) {
@@ -455,13 +455,13 @@ class _SinusoidalClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(reverse, offsets, size);
+    return _getPath(reverse!, offsets, size);
   }
 
   double _getY(Size size, double dx) {
-    final y = model.getY(dx, time.value);
-    final amplitude = model.amplitude;
-    return reverse ? size.height - y - amplitude : y + amplitude;
+    final y = model!.getY(dx, time!.value);
+    final amplitude = model!.amplitude;
+    return reverse! ? size.height - y - amplitude : y + amplitude;
   }
 
   @override
@@ -480,9 +480,9 @@ class _CombinedWaveClipper extends CustomClipper<Path> {
 
   static final List<Offset> offsets = <Offset>[];
 
-  final Animation<double> time;
-  final List<SinusoidalModel> models;
-  final bool reverse;
+  final Animation<double>? time;
+  final List<SinusoidalModel>? models;
+  final bool? reverse;
 
   @override
   Path getClip(Size size) {
@@ -492,17 +492,17 @@ class _CombinedWaveClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(reverse, offsets, size);
+    return _getPath(reverse!, offsets, size);
   }
 
   double _getY(Size size, double dx) {
-    final y = models
-        .map((model) => model.getY(dx, time.value))
+    final y = models!
+        .map((model) => model.getY(dx, time!.value))
         .reduce((current, next) => current + next);
-    final amplitude = models
+    final amplitude = models!
         .map((model) => model.amplitude)
         .reduce((current, next) => current + next);
-    return reverse ? size.height - y - amplitude : y + amplitude;
+    return reverse! ? size.height - y - amplitude : y + amplitude;
   }
 
   @override
@@ -520,8 +520,8 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
 
   static final List<Offset> offsets = <Offset>[];
 
-  final Animation<double> time;
-  final bool reverse;
+  final Animation<double>? time;
+  final bool? reverse;
 
   @override
   Path getClip(Size size) {
@@ -531,18 +531,18 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
       offsets.add(Offset(dx, _getY(size, dx)));
     }
 
-    return _getPath(reverse, offsets, size);
+    return _getPath(reverse!, offsets, size);
   }
 
   double _getY(Size size, double dx) {
-    final y = _getNormalY1(dx, time.value) +
-        _getNormalY2(dx, time.value) +
-        _getNormalY3(dx, time.value) +
-        _getNormalY4(dx, time.value);
+    final y = _getNormalY1(dx, time!.value) +
+        _getNormalY2(dx, time!.value) +
+        _getNormalY3(dx, time!.value) +
+        _getNormalY4(dx, time!.value);
 
     const amplitude = 100;
 
-    return reverse ? size.height - y - amplitude : y + amplitude;
+    return reverse! ? size.height - y - amplitude : y + amplitude;
   }
 
   double _getNormalY1(double dx, double time) =>
