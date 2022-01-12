@@ -142,12 +142,8 @@ See the [Changelog](CHANGELOG.md) to know what was changed.
 
 Feel free to contribute to this project.
 
-If you find a bug or want a feature, but don't know how to fix/implement it, please fire an [issue](https://github.com/dungnv2602/flutter_sinusoidals/issues).
+If you find a bug or want a feature, but don't know how to fix/implement it, please fire an [issue](https://github.com/rahulbourai/flutter_sinusoidals/issues).
 
-If you fixed a bug or implemented a feature, please send a [pull request](https://github.com/dungnv2602/flutter_sinusoidals/pulls).
-
-## Special Thanks
-
-A big thank you to [KhanAcademy](https://www.khanacademy.org/science/ap-physics-1/ap-mechanical-waves-and-sound) & [Wiki](https://en.wikipedia.org/wiki/Sine_wave) for foundational knowledge about sine wave.
+If you fixed a bug or implemented a feature, please send a [pull request](https://github.com/rahulbourai/flutter_sinusoidals/pulls).
 
 A big thank you to all the contributors to the project. Every PR / reported issue is greatly appreciated!
