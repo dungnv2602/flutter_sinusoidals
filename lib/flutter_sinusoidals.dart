@@ -476,7 +476,7 @@ abstract class _BaseSinusoidalClipper<T> extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(_SinusoidalClipper oldClipper) =>
+  bool shouldReclip(_BaseSinusoidalClipper oldClipper) =>
       reverse != oldClipper.reverse ||
       time != oldClipper.time ||
       model != oldClipper.model;
