@@ -449,7 +449,7 @@ abstract class _BaseSinusoidalClipper<T> extends CustomClipper<Path> {
   Path getClip(Size size) {
     offsets = List<Offset>.generate(
       size.width.ceil(),
-      (dx) => (Offset(dx as double, _getY(size, dx as double))),
+      (dx) => (Offset(dx.toDouble(), _getY(size, dx.toDouble()))),
       growable: false,
     )..add(
         Offset(size.width, _getY(size, size.width)),
