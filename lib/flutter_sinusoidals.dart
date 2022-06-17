@@ -432,34 +432,47 @@ abstract class _BaseWaveWidgetState<T extends _BaseWaveWidget> extends State<T>
   }
 }
 
-class _SinusoidalClipper extends CustomClipper<Path> {
-  _SinusoidalClipper({
+abstract class _BaseSinusoidalClipper<T> extends CustomClipper<Path> {
+  _BaseSinusoidalClipper({
     this.time,
     this.model,
     this.reverse,
   }) : super(reclip: time);
 
-  static final List<Offset> offsets = <Offset>[];
+  late final List<Offset> offsets;
 
   final Animation<double>? time;
-  final SinusoidalModel? model;
+  final T? model;
   final bool? reverse;
 
   @override
   Path getClip(Size size) {
-    offsets.clear();
-
-    for (double dx = 0.0; dx <= size.width; dx++) {
-      offsets.add(Offset(dx, _getY(size, dx)));
-    }
+    offsets = List<Offset>.generate(
+      size.width.ceil(),
+      (dx) => (Offset(dx as double, _getY(size, dx as double))),
+      growable: false,
+    )..add(
+        Offset(size.width, _getY(size, size.width)),
+      );
 
     return _getPath(reverse!, offsets, size);
   }
 
-  double _getY(Size size, double dx) {
-    final y = model!.getY(dx, time!.value);
-    final amplitude = model!.amplitude;
-    return reverse! ? size.height - y - amplitude : y + amplitude;
+  Path _getPath(bool reverse, List<Offset> offsets, Size size) {
+    if (reverse) {
+      return Path()
+        ..lineTo(0.0, size.height)
+        ..addPolygon(offsets, false)
+        ..lineTo(size.width, 0.0)
+        ..lineTo(0.0, 0.0)
+        ..close();
+    } else {
+      return Path()
+        ..addPolygon(offsets, false)
+        ..lineTo(size.width, size.height)
+        ..lineTo(0.0, size.height)
+        ..close();
+    }
   }
 
   @override
@@ -467,71 +480,65 @@ class _SinusoidalClipper extends CustomClipper<Path> {
       reverse != oldClipper.reverse ||
       time != oldClipper.time ||
       model != oldClipper.model;
+
+  double _getY(Size size, double dx);
 }
 
-class _CombinedWaveClipper extends CustomClipper<Path> {
-  _CombinedWaveClipper({
-    this.time,
-    this.models,
-    this.reverse,
-  }) : super(reclip: time);
-
-  static final List<Offset> offsets = <Offset>[];
-
-  final Animation<double>? time;
-  final List<SinusoidalModel>? models;
-  final bool? reverse;
+class _SinusoidalClipper extends _BaseSinusoidalClipper<SinusoidalModel> {
+  _SinusoidalClipper({
+    Animation<double>? time,
+    SinusoidalModel? model,
+    bool? reverse,
+  }) : super(time: time, model: model, reverse: reverse);
 
   @override
   Path getClip(Size size) {
-    offsets.clear();
-
-    for (double dx = 0.0; dx <= size.width; dx++) {
-      offsets.add(Offset(dx, _getY(size, dx)));
-    }
+    offsets = List<Offset>.generate(
+      size.width.ceil(),
+      (dx) => (Offset(dx as double, _getY(size, dx as double))),
+      growable: false,
+    )..add(
+        Offset(size.width, _getY(size, size.width)),
+      );
 
     return _getPath(reverse!, offsets, size);
   }
 
+  @override
   double _getY(Size size, double dx) {
-    final y = models!
-        .map((model) => model.getY(dx, time!.value))
+    final y = model!.getY(dx, time!.value);
+    final amplitude = model!.amplitude;
+    return reverse! ? size.height - y - amplitude : y + amplitude;
+  }
+}
+
+class _CombinedWaveClipper
+    extends _BaseSinusoidalClipper<List<SinusoidalModel>> {
+  _CombinedWaveClipper({
+    Animation<double>? time,
+    List<SinusoidalModel>? models,
+    bool? reverse,
+  }) : super(time: time, model: models, reverse: reverse);
+
+  @override
+  double _getY(Size size, double dx) {
+    final y = model!
+        .map((mod) => mod.getY(dx, time!.value))
         .reduce((current, next) => current + next);
-    final amplitude = models!
-        .map((model) => model.amplitude)
+    final amplitude = model!
+        .map((mod) => mod.amplitude)
         .reduce((current, next) => current + next);
     return reverse! ? size.height - y - amplitude : y + amplitude;
   }
-
-  @override
-  bool shouldReclip(_CombinedWaveClipper oldClipper) =>
-      reverse != oldClipper.reverse ||
-      time != oldClipper.time ||
-      models != oldClipper.models;
 }
 
-class _MagmaWaveClipper extends CustomClipper<Path> {
+class _MagmaWaveClipper extends _BaseSinusoidalClipper<void> {
   _MagmaWaveClipper({
-    this.time,
-    this.reverse,
-  }) : super(reclip: time);
-
-  static final List<Offset> offsets = <Offset>[];
-
-  final Animation<double>? time;
-  final bool? reverse;
+    Animation<double>? time,
+    bool? reverse,
+  }) : super(time: time, reverse: reverse);
 
   @override
-  Path getClip(Size size) {
-    offsets.clear();
-
-    for (double dx = 0.0; dx <= size.width; dx++) {
-      offsets.add(Offset(dx, _getY(size, dx)));
-    }
-
-    return _getPath(reverse!, offsets, size);
-  }
-
   double _getY(Size size, double dx) {
     final y = _getNormalY1(dx, time!.value) +
         _getNormalY2(dx, time!.value) +
@@ -551,25 +558,4 @@ class _MagmaWaveClipper extends CustomClipper<Path> {
       25 * math.sin(math.sin(15 / 100 * dx) - math.sin(2 * time) + 2.5);
   double _getNormalY4(double dx, double time) =>
       25 * math.cos(math.cos(5 / 100 * dx) - math.cos(time) + 2.5);
-
-  @override
-  bool shouldReclip(_MagmaWaveClipper oldClipper) =>
-      reverse != oldClipper.reverse || time != oldClipper.time;
-}
-
-Path _getPath(bool reverse, List<Offset> offsets, Size size) {
-  if (reverse) {
-    return Path()
-      ..lineTo(0.0, size.height)
-      ..addPolygon(offsets, false)
-      ..lineTo(size.width, 0.0)
-      ..lineTo(0.0, 0.0)
-      ..close();
-  } else {
-    return Path()
-      ..addPolygon(offsets, false)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0.0, size.height)
-      ..close();
-  }
 }
