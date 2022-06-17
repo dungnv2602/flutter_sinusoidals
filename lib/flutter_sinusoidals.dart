@@ -450,7 +450,6 @@ abstract class _BaseSinusoidalClipper<T> extends CustomClipper<Path> {
     offsets = List<Offset>.generate(
       size.width.ceil(),
       (dx) => (Offset(dx.toDouble(), _getY(size, dx.toDouble()))),
-      growable: false,
     )..add(
         Offset(size.width, _getY(size, size.width)),
       );
@@ -490,19 +489,6 @@ class _SinusoidalClipper extends _BaseSinusoidalClipper<SinusoidalModel> {
     SinusoidalModel? model,
     bool? reverse,
   }) : super(time: time, model: model, reverse: reverse);
-
-  @override
-  Path getClip(Size size) {
-    offsets = List<Offset>.generate(
-      size.width.ceil(),
-      (dx) => (Offset(dx as double, _getY(size, dx as double))),
-      growable: false,
-    )..add(
-        Offset(size.width, _getY(size, size.width)),
-      );
-
-    return _getPath(reverse!, offsets, size);
-  }
 
   @override
   double _getY(Size size, double dx) {
