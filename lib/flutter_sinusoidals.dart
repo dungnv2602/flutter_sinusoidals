@@ -439,7 +439,7 @@ abstract class _BaseSinusoidalClipper<T> extends CustomClipper<Path> {
     this.reverse,
   }) : super(reclip: time);
 
-  late final List<Offset> offsets;
+  late List<Offset> offsets;
 
   final Animation<double>? time;
   final T? model;
