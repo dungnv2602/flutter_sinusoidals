@@ -6,12 +6,12 @@ version: 0.1.4
 homepage: https://github.com/dungnv2602/flutter_sinusoidals
 
 environment:
-  sdk: '>=2.9.0 <3.0.0'
+  sdk: '>=2.19.3 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^1.2.5
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
